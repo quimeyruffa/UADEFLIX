@@ -1,23 +1,29 @@
-import logo from './logo.svg';
 import './App.css';
+import { Firstpage, Login, MoviePage, Register } from './pages';
+import { Routes, Route } from "react-router-dom";
+import { Navbar } from './components/components';
 
 function App() {
+  if(localStorage.getItem('token')) return <MoviePage />
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+    <Navbar>
+    <a href="/">ABOUT</a>
+    <a href="#">UADEFLIX ORIGIN</a>
+    <a href="/register">REGISTER</a>
+    <a href="/login" className="login">
+      LOG IN
+    </a>
+  </Navbar>
+    <Routes>
+    <Route path="/" element={<Firstpage />} />
+    <Route path="login" element={<Login />} />
+    <Route path="register" element={<Register />} />
+    <Route path="/moviePage" element={<Firstpage />} />
+  </Routes>
+
     </div>
   );
 }
