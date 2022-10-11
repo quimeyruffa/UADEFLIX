@@ -105,7 +105,7 @@ const Register = () => {
     handleGetPlans();
   }, []);
   const handleGetPlans = async () => {
-    await fetch("http://intap-backoffice.herokuapp.com/public/api/paquetes")
+    await fetch("https://intap-backoffice.herokuapp.com/public/api/paquetes")
       .then((response) => response.json())
       .then((data) => {
         setPlanes(data);
