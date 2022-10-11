@@ -8,7 +8,6 @@ import {
   CenterContainer,
   ButtonSigned,
 } from "../components/components";
-import { Navigate } from "react-router-dom";
 
 const Login = () => {
   const [inputValue, setInputValue] = useState("");

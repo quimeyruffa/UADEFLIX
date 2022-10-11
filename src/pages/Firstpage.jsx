@@ -24,7 +24,7 @@ const Firstpage = () => {
                   Smart TVs,Playstation,Xbox,Chromecast, Apple TV,Blu-ray
                   players and more.
                 </p>
-                <button onClick={""}>Ver Planes</button>
+                <button onClick={()=>window.location.href = '/planes'}>Ver Planes</button>
               </WelcomeMsg>
             </div>
           </>

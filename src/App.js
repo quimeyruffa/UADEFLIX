@@ -1,5 +1,5 @@
 import './App.css';
-import { Firstpage, Login, MoviePage, Register } from './pages';
+import { Firstpage, Login, MoviePage, Planes, Register } from './pages';
 import { Routes, Route } from "react-router-dom";
 import { Navbar } from './components/components';
 
@@ -22,6 +22,7 @@ function App() {
     <Route path="login" element={<Login />} />
     <Route path="register" element={<Register />} />
     <Route path="/moviePage" element={<Firstpage />} />
+    <Route path="planes" element={<Planes />} />
   </Routes>
 
     </div>
