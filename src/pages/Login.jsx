@@ -157,7 +157,7 @@ const Login = () => {
               marginTop: 100,
             }}
           >
-            <span style={{ marginRight: 20 }}>New to Netflix?</span>{" "}
+            <span style={{ marginRight: 20 }}>New to UADEFLIX?</span>{" "}
             <b style={{cursor: "pointer"}} onClick={()=> window.location.href = '/register'}> Sign up now </b>
           </div>
 
