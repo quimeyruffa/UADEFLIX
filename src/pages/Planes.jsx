@@ -24,7 +24,7 @@ const Planes = () => {
       <Card style={{ height: "568px" }}>
         <CenterContainer>
           <h1>Plan Information</h1>
-          {planes && (
+          {planes ? (
             <>
               <CardPlanes style={{ background: "#F95959" }}>
                 <h2 style={{ margin: 0 }}>{planes[0].nombre}</h2>
@@ -42,6 +42,8 @@ const Planes = () => {
                 <span style={{ fontSize: 12 }}>{planes[2].descripcion}</span>
               </CardPlanes>
             </>
+          ) : (
+            ""
           )}
         </CenterContainer>
       </Card>
