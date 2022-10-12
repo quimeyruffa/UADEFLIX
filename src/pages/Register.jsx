@@ -170,7 +170,7 @@ const Register = () => {
             </CardPlanes>
 
             <ButtonSigned
-              style={{ width: "420px", marginTop: 40 }}
+              style={{ width: "420px", marginTop: 40, cursor: "pointer" }}
               onClick={handleRegister}
             >
               Sign Up{" "}
