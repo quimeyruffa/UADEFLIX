@@ -59,7 +59,6 @@ const Carrousels = () => {
     setOpen(true);
   };
 
-  const colors = ["#FF884B", "#5F9DF7", "#1746A2", "#FFF7E9"];
   return (
     <>
       {loading ? (
@@ -93,7 +92,8 @@ const Carrousels = () => {
                 {items.contenidos.map((item, index) => (
                   <div
                     style={{
-                      background: colors[index],
+                      backgroundImage:`url(${item.urlImage})`,
+                      backgroundPosition: 'top center',
                       height: 200,
                       width: 497,
                       display: "flex",
