@@ -40,13 +40,13 @@ const Carrousels = () => {
     getDataCarrusel();
   }, []);
   const getData = async () => {
-    await fetch("https://uade-ia-cms.herokuapp.com/api/contenidos").then(
+    await fetch("https://uadeflix-cms.up.railway.app/api/contenidos").then(
       (res) => res.json()
     );
   };
 
   const getDataCarrusel = async () => {
-    await fetch("https://uade-ia-cms.herokuapp.com/api/carruseles")
+    await fetch("https://uadeflix-cms.up.railway.app/api/carruseles")
       .then((res) => res.json())
       .then((res) => {
         setCarrousel(res.results);
@@ -94,6 +94,7 @@ const Carrousels = () => {
                     style={{
                       backgroundImage:`url(${item.urlImage})`,
                       backgroundPosition: 'top center',
+                      backgroundSize: `497px 200px`,
                       height: 200,
                       width: 497,
                       display: "flex",

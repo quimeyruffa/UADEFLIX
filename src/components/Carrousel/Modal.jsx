@@ -33,6 +33,7 @@ export default function BasicModal({ item, open, setOpen }) {
               backgroundPosition: "top center",
               width: "100%",
               height: 300,
+              backgroundSize: `100% 300px`,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -59,7 +60,7 @@ export default function BasicModal({ item, open, setOpen }) {
                 fontWeight: "bold",
                 margin: 10
               }}
-              onClick={() => (window.location.href = item.urlVideo)}
+              onClick={() => (console.log(item.urlVideo))}
             >
               <PlayArrowIcon />
               Reproducir
