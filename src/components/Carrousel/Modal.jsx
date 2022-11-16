@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-
+import { useNavigate } from "react-router-dom";
 const style = {
   position: "absolute",
   top: "50%",
@@ -17,7 +17,13 @@ const style = {
 };
 
 export default function BasicModal({ item, open, setOpen }) {
+  const navigate = useNavigate();
+
   const handleClose = () => setOpen(false);
+  const handleRedirect = () => {
+    localStorage.setItem("url",item.urlVideo )
+    navigate(`/screen`);
+  };
   return (
     <div>
       <Modal
@@ -39,7 +45,7 @@ export default function BasicModal({ item, open, setOpen }) {
               alignItems: "center",
               marginBottom: 10,
               color: "black",
-              fontWeight:600
+              fontWeight: 600,
             }}
           >
             <Typography id="modal-modal-title" variant="h4" component="h2">
@@ -58,15 +64,20 @@ export default function BasicModal({ item, open, setOpen }) {
                 height: 42,
                 borderRadius: 5,
                 fontWeight: "bold",
-                margin: 10
+                margin: 10,
+                cursor: "pointer",
               }}
-              onClick={() => (console.log(item.urlVideo))}
+              onClick={handleRedirect}
             >
               <PlayArrowIcon />
               Reproducir
             </button>
           </div>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }} style={{padding:10}}>
+          <Typography
+            id="modal-modal-description"
+            sx={{ mt: 2 }}
+            style={{ padding: 10 }}
+          >
             <div>
               <p>
                 {item.year} - {item.duration} minutos

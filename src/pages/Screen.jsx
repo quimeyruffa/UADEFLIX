@@ -1,11 +1,14 @@
 import React from "react";
 import ReactPlayer from "react-player";
-
-const Screen = ({ url }) => {
+const Screen = () => {
+ const [url, setUrl] = React.useState('second')
+  React.useEffect(()=>{
+    setUrl(localStorage.getItem("url"))
+  },[])
   return (
     <div style={{ width: "100%", height: "100%", position: "absolute" }}>
       <ReactPlayer
-        url={'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'}
+        url={url}
         width="100%"
         height="100%"
         controls

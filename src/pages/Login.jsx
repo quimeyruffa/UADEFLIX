@@ -8,13 +8,23 @@ import {
   CenterContainer,
   ButtonSigned,
 } from "../components/components";
-
+import { useParams } from "react-router-dom";
 const Login = () => {
   const [inputValue, setInputValue] = useState("");
   const [email, setEmail] = useState("");
   const [valid, setValid] = useState(true);
   const [validEmail, setValidEmail] = useState(true);
+  let { token } = useParams();
 
+  React.useEffect(() => {
+    handleTokenParams();
+  }, []);
+
+  const handleTokenParams = async () => {
+    if (token !== "false") {
+      await requireToken(token);
+    }
+  };
   const handleLoginUser = (e) => {
     e.preventDefault();
     if (valid && validEmail) {
@@ -48,9 +58,15 @@ const Login = () => {
       },
     });
     const data = await res.json();
-    localStorage.setItem("token", t);
-    localStorage.setItem("user", JSON.stringify(data));
-    window.location.href = "/moviePage";
+    if (data.error) {
+      alert(
+        "El token con el que intentaste ingresar no es válido, probá logeándote"
+      );
+    } else {
+      localStorage.setItem("token", t);
+      localStorage.setItem("user", JSON.stringify(data));
+      window.location.href = "/moviePage";
+    }
   };
 
   let regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
@@ -137,7 +153,10 @@ const Login = () => {
             )}
           </div>
 
-          <ButtonSigned style={{ marginTop: 50, cursor: 'pointer' }} onClick={handleLoginUser}>
+          <ButtonSigned
+            style={{ marginTop: 50, cursor: "pointer" }}
+            onClick={handleLoginUser}
+          >
             Sign In
           </ButtonSigned>
           <div style={{ width: "400px", display: "flex", padding: "0.5rem" }}>
@@ -157,7 +176,13 @@ const Login = () => {
             }}
           >
             <span style={{ marginRight: 20 }}>New to UADEFLIX?</span>{" "}
-            <b style={{cursor: "pointer"}} onClick={()=> window.location.href = '/register'}> Sign up now </b>
+            <b
+              style={{ cursor: "pointer" }}
+              onClick={() => (window.location.href = "/register")}
+            >
+              {" "}
+              Sign up now{" "}
+            </b>
           </div>
 
           <div

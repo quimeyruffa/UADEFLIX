@@ -14,12 +14,12 @@ const override = {
 const responsive = {
   desktop: {
     breakpoint: { max: 3000, min: 1024 },
-    items: 2,
+    items: 4,
     slidesToSlide: 1, // optional, default to 1.
   },
   tablet: {
     breakpoint: { max: 1024, min: 464 },
-    items: 2,
+    items: 5,
     slidesToSlide: 7, // optional, default to 1.
   },
   mobile: {
@@ -50,6 +50,7 @@ const Carrousels = () => {
       .then((res) => res.json())
       .then((res) => {
         setCarrousel(res.results);
+        console.log(res.results)
         setLoading(false);
       });
   };
@@ -89,7 +90,7 @@ const Carrousels = () => {
                 {items.title}
               </h2>
               <Carousel responsive={responsive} key={index}>
-                {items.contenidos.map((item, index) => (
+                {items.contents.map((item, index) => (
                   <div
                     style={{
                       backgroundImage:`url(${item.urlImage})`,
