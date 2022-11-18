@@ -8,20 +8,22 @@ import {
   CenterContainer,
   ButtonSigned,
 } from "../components/components";
-import { useParams } from "react-router-dom";
+import { useSearchParams } from 'react-router-dom';
+
 const Login = () => {
   const [inputValue, setInputValue] = useState("");
   const [email, setEmail] = useState("");
   const [valid, setValid] = useState(true);
   const [validEmail, setValidEmail] = useState(true);
-  let { token } = useParams();
-
+  const [searchParams] = useSearchParams();
+  
   React.useEffect(() => {
     handleTokenParams();
-  }, []);
+  }, [searchParams]);
 
   const handleTokenParams = async () => {
-    if (token !== "false") {
+    let token = searchParams.get('token')
+    if (token) {
       await requireToken(token);
     }
   };

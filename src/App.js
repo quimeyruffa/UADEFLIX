@@ -28,13 +28,13 @@ function App() {
         <a href="/">ABOUT</a>
         <a href="#">UADEFLIX ORIGIN</a>
         <a href="/register">REGISTER</a>
-        <a href="/login/false" className="login">
+        <a href="/login" className="login">
           LOG IN
         </a>
       </Navbar>
       <Routes>
         <Route path="/" element={<Firstpage />} />
-        <Route path="login/:token" element={<Login />} />
+        <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="/moviePage" element={<Firstpage />} />
         <Route path="planes" element={<Planes />} />
