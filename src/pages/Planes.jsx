@@ -49,7 +49,7 @@ const Planes = ({ button, filter, showUserPlans }) => {
       };
 
       fetch(
-        "http://intap-suscripciones.herokuapp.com/public/api/suscribirseMultiple",
+        "https://intap-suscripciones.herokuapp.com/public/api/suscribirseMultiple",
         requestOptions
       )
         .then((response) => response.text())
@@ -127,7 +127,7 @@ const Planes = ({ button, filter, showUserPlans }) => {
       };
 
       fetch(
-        "http://intap-suscripciones.herokuapp.com/public/api/desuscribirseMultiple",
+        "https://intap-suscripciones.herokuapp.com/public/api/desuscribirseMultiple",
         requestOptions
       )
         .then((response) => response.text())
