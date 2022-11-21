@@ -21,7 +21,7 @@ const MoviePage = () => {
 
   React.useEffect(() => {
     let users = localStorage.getItem("user");
-    setName(JSON.parse(users).user);
+    setName(JSON.parse(users));
   }, []);
   return (
     <div>
@@ -87,8 +87,7 @@ const MoviePage = () => {
               "aria-labelledby": "basic-button",
             }}
           >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>Change Password</MenuItem>
+            <MenuItem onClick={handleClose}>Ver Planes</MenuItem>
             <MenuItem
               onClick={() => {
                 localStorage.removeItem("token");

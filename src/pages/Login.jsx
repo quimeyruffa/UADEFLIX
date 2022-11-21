@@ -8,6 +8,7 @@ import {
   CenterContainer,
   ButtonSigned,
 } from "../components/components";
+import jwt from 'jsonwebtoken';
 import { useSearchParams } from 'react-router-dom';
 
 const Login = () => {
@@ -52,21 +53,14 @@ const Login = () => {
   };
 
   const requireToken = async (t) => {
-    const res = await fetch("https://ssog2.herokuapp.com/auth/protected", {
-      method: "GET",
-      headers: {
-        Authorization: "Bearer " + t,
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await res.json();
-    if (data.error) {
+    const decoded = jwt.decode(t, process.env.REACT_APP_JWT_PUBLIC_CLIENT, { algorithm: ['RS256'] });
+    if (!decoded) {
       alert(
         "El token con el que intentaste ingresar no es válido, probá logeándote"
       );
     } else {
       localStorage.setItem("token", t);
-      localStorage.setItem("user", JSON.stringify(data));
+      localStorage.setItem("user", JSON.stringify(decoded));
       window.location.href = "/moviePage";
     }
   };

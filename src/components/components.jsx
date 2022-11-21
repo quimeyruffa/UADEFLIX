@@ -119,7 +119,7 @@ const CardPlanes = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  height: 108px;
+  height: 110px;
   width: 420px;
   margin: 10px;
   border: none;

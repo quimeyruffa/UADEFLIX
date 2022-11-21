@@ -2,7 +2,6 @@ import React from "react";
 import {
   ButtonSigned,
   Card,
-  CardPlanes,
   Center,
   CenterContainer,
   Input,
@@ -13,11 +12,12 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import Planes from "./Planes";
+import jwt from 'jsonwebtoken';
 const steps = ["", ""];
 
 const Register = () => {
   const [step, setStep] = React.useState(0);
-  const [planes, setPlanes] = React.useState([]);
 
   //   name
   let reg = /\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+/;
@@ -101,20 +101,44 @@ const Register = () => {
     setInputValue(e.target.value);
   }
 
-  React.useEffect(() => {
-    handleGetPlans();
-  }, []);
-  const handleGetPlans = async () => {
-    await fetch("https://intap-backoffice.herokuapp.com/public/api/paquetes")
-      .then((response) => response.json())
-      .then((data) => {
-        setPlanes(data);
-      });
+
+  const handleLoginUser = async () => {
+    if (valid && validEmail) {
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: email,
+          password: inputValue,
+          tenant: "Web_Mobile",
+        }),
+      };
+      await fetch("https://ssog2.herokuapp.com/auth/login", requestOptions)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.token) {
+            requireToken(data.token);
+          } else {
+            alert("El usuario no existe.");
+          }
+        });
+    }
   };
 
+  const requireToken = (t) => {
+    const decoded = jwt.decode(t, process.env.REACT_APP_JWT_PUBLIC_CLIENT, { algorithm: ['RS256'] });
+    if (!decoded) {
+      alert(
+        "El token con el que intentaste ingresar no es válido, probá logeándote"
+      );
+    } else {
+      localStorage.setItem("token", t);
+      localStorage.setItem("user", JSON.stringify(decoded));
+    }
+  };
   const handleStep = () => {
-    if (name && email && number && inputValue && lastname) {
-      setStep(1);
+    if (name && email && number && inputValue && lastname &&validName && validEmail && validNumber && valid && validLastname) {
+      handleRegister()
     } else {
       alert("completa los campos");
     }
@@ -138,12 +162,13 @@ const Register = () => {
         .then((response) => response.json())
         .then((data) => {
           if (data.msg === "User Created") {
-            window.location.href ='/login'
-        }else{
-            alert(data.error)
-        }
+            handleLoginUser()
+            setStep(1);
+          } else {
+            alert(data.error);
+          }
         });
-      // 
+      
     }
   };
 
@@ -153,28 +178,7 @@ const Register = () => {
         return (
           <CenterContainer>
             <p>2nd step - Plan Information</p>
-            <CardPlanes style={{ background: "#F95959" }}>
-              <h2 style={{ margin: 0 }}>{planes[0].nombre}</h2>
-              <span>${planes[0].precio}</span>
-              <span style={{ fontSize: 12 }}>{planes[0].descripcion}</span>
-            </CardPlanes>
-            <CardPlanes style={{ background: "#FACF5A", color: "black" }}>
-              <h2 style={{ margin: 0 }}>{planes[1].nombre}</h2>
-              <span>${planes[1].precio}</span>
-              <span style={{ fontSize: 12 }}>{planes[1].descripcion}</span>
-            </CardPlanes>
-            <CardPlanes style={{ background: "#455D7A" }}>
-              <h2 style={{ margin: 0 }}>{planes[2].nombre}</h2>
-              <span>${planes[2].precio}</span>
-              <span style={{ fontSize: 12 }}>{planes[2].descripcion}</span>
-            </CardPlanes>
-
-            <ButtonSigned
-              style={{ width: "420px", marginTop: 40, cursor: "pointer" }}
-              onClick={handleRegister}
-            >
-              Sign Up{" "}
-            </ButtonSigned>
+            <Planes button={'Sign Up'} filter={false} showUserPlans={false}/>
           </CenterContainer>
         );
       default:

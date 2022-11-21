@@ -50,7 +50,6 @@ const Carrousels = () => {
       .then((res) => res.json())
       .then((res) => {
         setCarrousel(res.results);
-        console.log(res.results)
         setLoading(false);
       });
   };

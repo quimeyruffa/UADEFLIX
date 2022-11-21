@@ -3,6 +3,7 @@ import { Firstpage, Login, MoviePage, Planes, Register, Screen } from "./pages";
 import { Routes, Route } from "react-router-dom";
 import { Navbar } from "./components/components";
 import React from "react";
+import HandlePlans from "./pages/HandlePlans";
 function App() {
   // React.useEffect(() => {
   //   if (localStorage.getItem("token")){
@@ -16,6 +17,7 @@ function App() {
         <Route path="/" element={<MoviePage />} />
         <Route path="/screen" element={<Screen />} />
         <Route path="/moviePage" element={<MoviePage />} />
+        <Route path="/verPlanes" element={<HandlePlans />} />
       </Routes>
     );
   }
@@ -37,7 +39,7 @@ function App() {
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="/moviePage" element={<Firstpage />} />
-        <Route path="planes" element={<Planes />} />
+        <Route path="/verPlanes" element={<HandlePlans />} />
       </Routes>
     </div>
   );

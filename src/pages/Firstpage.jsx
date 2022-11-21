@@ -1,6 +1,6 @@
 import React from "react";
 import { Img,WelcomeMsg } from "../components/components";
-import Planes from "../components/Planes/Planes";
+import Planes from "../components/Planes/Plan";
 import ImgUrl from "../img/portada.png";
 
 const Firstpage = () => {
