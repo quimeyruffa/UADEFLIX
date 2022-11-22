@@ -8,22 +8,45 @@ import {
   CenterContainer,
   ButtonSigned,
 } from "../components/components";
-import jwt from 'jsonwebtoken';
-import { useSearchParams } from 'react-router-dom';
+import jwt from "jsonwebtoken";
+import { useSearchParams } from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader";
+import SnackBarAlert from "../components/SnackBarAlert";
 
+const override = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "white",
+};
 const Login = () => {
   const [inputValue, setInputValue] = useState("");
   const [email, setEmail] = useState("");
   const [valid, setValid] = useState(true);
   const [validEmail, setValidEmail] = useState(true);
   const [searchParams] = useSearchParams();
-  
+  const [loading, setLoading] = React.useState(false);
+  const [text, setText] = React.useState("");
+  const [state, setState] = React.useState({
+    open: false,
+  });
+  const { open } = state;
+
+  const handleShowData = () => {
+    setState({ open: true });
+    setTimeout(function () {
+      handleClose();
+    }, 3000);
+  };
+
+  const handleClose = () => {
+    setState({ open: false });
+  };
   React.useEffect(() => {
     handleTokenParams();
   }, [searchParams]);
 
   const handleTokenParams = async () => {
-    let token = searchParams.get('token')
+    let token = searchParams.get("token");
     if (token) {
       await requireToken(token);
     }
@@ -31,6 +54,7 @@ const Login = () => {
   const handleLoginUser = (e) => {
     e.preventDefault();
     if (valid && validEmail) {
+      setLoading(true);
       const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -45,19 +69,25 @@ const Login = () => {
         .then((data) => {
           if (data.token) {
             requireToken(data.token);
+            setLoading(false);
           } else {
-            alert("El usuario no existe.");
+            setLoading(false);
+            setText("El usuario no existe.");
+            handleShowData();
           }
         });
     }
   };
 
   const requireToken = async (t) => {
-    const decoded = jwt.decode(t, process.env.REACT_APP_JWT_PUBLIC_CLIENT, { algorithm: ['RS256'] });
+    const decoded = jwt.decode(t, process.env.REACT_APP_JWT_PUBLIC_CLIENT, {
+      algorithm: ["RS256"],
+    });
     if (!decoded) {
-      alert(
+      setText(
         "El token con el que intentaste ingresar no es válido, probá logeándote"
       );
+      handleShowData();
     } else {
       localStorage.setItem("token", t);
       localStorage.setItem("user", JSON.stringify(decoded));
@@ -96,6 +126,7 @@ const Login = () => {
   };
   return (
     <Center>
+      <SnackBarAlert text={text} open={open} handleClose={handleClose} />
       <Card>
         <div style={{ width: "100%" }}>
           <h1 style={{ fontSize: "50px", marginLeft: "60px" }}>Sign In</h1>
@@ -148,13 +179,25 @@ const Login = () => {
               </P>
             )}
           </div>
-
-          <ButtonSigned
-            style={{ marginTop: 50, cursor: "pointer" }}
-            onClick={handleLoginUser}
-          >
-            Sign In
-          </ButtonSigned>
+          {loading ? (
+            <div style={{ paddingTop: 10 }}>
+              <ClipLoader
+                color={"#ffffff"}
+                loading={loading}
+                cssOverride={override}
+                size={30}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
+            </div>
+          ) : (
+            <ButtonSigned
+              style={{ marginTop: 50, cursor: "pointer" }}
+              onClick={handleLoginUser}
+            >
+              Sign In
+            </ButtonSigned>
+          )}
           <div style={{ width: "400px", display: "flex", padding: "0.5rem" }}>
             <label>
               <input type="checkbox" id="cbox1" value="first_checkbox" />{" "}

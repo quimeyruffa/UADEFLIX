@@ -5,6 +5,9 @@ import Modal from "@mui/material/Modal";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useNavigate } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
+import SnackBarAlert from "../SnackBarAlert";
+
+
 const override = {
   display: "block",
   margin: "0 auto",
@@ -27,6 +30,22 @@ export default function BasicModal({ item, open, setOpen }) {
   const navigate = useNavigate();
   const [data, setData] = React.useState();
   const [loading, setLoading] = React.useState(false);
+  const [text, setText] = React.useState("");
+  const [state, setState] = React.useState({
+    openModal: false,
+  });
+  const { openModal } = state;
+
+  const handleShowData = () => {
+    setState({ openModal: true });
+    setTimeout(function () {
+      handleCloseAlert();
+    }, 3000);
+  };
+
+  const handleCloseAlert = () => {
+    setState({ openModal: false });
+  };
   React.useEffect(() => {
     setLoading(true);
     handleGetItem();
@@ -68,15 +87,17 @@ export default function BasicModal({ item, open, setOpen }) {
           localStorage.setItem("url", data?.urlVideo);
           navigate(`/screen`);
         } else {
-          alert(
+          setText(
             "La pelicula no esta disponible para su tipo de plan, agregue un nuevo plan para ver la pelicula"
           );
+          handleShowData()
         }
       })
       .catch((error) => console.log("error", error));
   };
   return (
     <>
+    <SnackBarAlert text={text} open={openModal} handleClose={handleCloseAlert} />
       <div>
         <Modal
           open={open}

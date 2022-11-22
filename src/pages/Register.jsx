@@ -13,10 +13,19 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Planes from "./Planes";
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 const steps = ["", ""];
+import ClipLoader from "react-spinners/ClipLoader";
+import SnackBarAlert from "../components/SnackBarAlert";
+
+const override = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "white",
+};
 
 const Register = () => {
+  const [loading, setLoading] = React.useState(false);
   const [step, setStep] = React.useState(0);
 
   //   name
@@ -58,6 +67,22 @@ const Register = () => {
   const [validNumber, setValidNumber] = React.useState(true);
   const [validEmail, setValidEmail] = React.useState(true);
   let regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
+  const [text, setText] = React.useState("");
+  const [state, setState] = React.useState({
+    open: false,
+  });
+  const { open } = state;
+
+  const handleShowData = () => {
+    setState({ open: true });
+    setTimeout(function () {
+      handleClose();
+    }, 3000);
+  };
+
+  const handleClose = () => {
+    setState({ open: false });
+  };
   function onChangeEmail(e) {
     setEmail(e.target.value);
   }
@@ -101,9 +126,9 @@ const Register = () => {
     setInputValue(e.target.value);
   }
 
-
   const handleLoginUser = async () => {
     if (valid && validEmail) {
+      setLoading(true);
       const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -118,33 +143,52 @@ const Register = () => {
         .then((data) => {
           if (data.token) {
             requireToken(data.token);
+            setLoading(false);
           } else {
-            alert("El usuario no existe.");
+            setLoading(false);
+            setText(
+              "Error al realizar el registro, por favor intente nuevamente"
+            );
+            handleShowData();
           }
         });
     }
   };
 
   const requireToken = (t) => {
-    const decoded = jwt.decode(t, process.env.REACT_APP_JWT_PUBLIC_CLIENT, { algorithm: ['RS256'] });
+    const decoded = jwt.decode(t, process.env.REACT_APP_JWT_PUBLIC_CLIENT, {
+      algorithm: ["RS256"],
+    });
     if (!decoded) {
-      alert(
-        "El token con el que intentaste ingresar no es válido, probá logeándote"
-      );
+      setText("Error al realizar el registro, por favor intente nuevamente");
+      handleShowData();
     } else {
       localStorage.setItem("token", t);
       localStorage.setItem("user", JSON.stringify(decoded));
     }
   };
   const handleStep = () => {
-    if (name && email && number && inputValue && lastname &&validName && validEmail && validNumber && valid && validLastname) {
-      handleRegister()
+    if (
+      name &&
+      email &&
+      number &&
+      inputValue &&
+      lastname &&
+      validName &&
+      validEmail &&
+      validNumber &&
+      valid &&
+      validLastname
+    ) {
+      handleRegister();
     } else {
-      alert("completa los campos");
+      setText("Por favor, complete los campos correctamente");
+      handleShowData();
     }
   };
   const handleRegister = async () => {
     if (validName && validEmail && validNumber && valid && validLastname) {
+      setLoading(true);
       const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -162,13 +206,15 @@ const Register = () => {
         .then((response) => response.json())
         .then((data) => {
           if (data.msg === "User Created") {
-            handleLoginUser()
+            handleLoginUser();
             setStep(1);
           } else {
-            alert(data.error);
+            setText(
+              "Error al registrar el usuario, por favor intente nuevamente"
+            );
+            handleShowData();
           }
         });
-      
     }
   };
 
@@ -178,7 +224,12 @@ const Register = () => {
         return (
           <CenterContainer>
             <p>2nd step - Plan Information</p>
-            <Planes button={'Sign Up'} filter={false} showUserPlans={false} move={true}/>
+            <Planes
+              button={"Sign Up"}
+              filter={false}
+              showUserPlans={false}
+              move={true}
+            />
           </CenterContainer>
         );
       default:
@@ -303,18 +354,32 @@ const Register = () => {
                 </P>
               )}
             </div>
-            <ButtonSigned
-              style={{ width: "420px", marginTop: 50, cursor: "pointer" }}
-              onClick={handleStep}
-            >
-              Step 2 <ArrowForwardIcon />
-            </ButtonSigned>
+            {loading ? (
+              <div style={{ paddingTop: 10 }}>
+                <ClipLoader
+                  color={"#ffffff"}
+                  loading={loading}
+                  cssOverride={override}
+                  size={30}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                />
+              </div>
+            ) : (
+              <ButtonSigned
+                style={{ width: "420px", marginTop: 50, cursor: "pointer" }}
+                onClick={handleStep}
+              >
+                Step 2 <ArrowForwardIcon />
+              </ButtonSigned>
+            )}
           </CenterContainer>
         );
     }
   };
   return (
     <Center>
+      <SnackBarAlert text={text} open={open} handleClose={handleClose} />
       <Card>
         <div style={{ width: "100%" }}>
           <h1 style={{ fontSize: "50px", marginLeft: "60px" }}>Sign Up</h1>
