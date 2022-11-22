@@ -8,7 +8,7 @@ const override = {
   borderColor: "white",
 };
 const color = ["#F95959", "#F49D1A", "#455D7A"];
-const Planes = ({ button, filter, showUserPlans }) => {
+const Planes = ({ button, filter, showUserPlans, move }) => {
   const [planes, setPlanes] = React.useState();
   const [userPlanes, setUserPlanes] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
@@ -58,6 +58,9 @@ const Planes = ({ button, filter, showUserPlans }) => {
 
       setUserPlanes([]);
       handleGetPlans();
+      if(move){
+        window.location.href = "/moviePage";
+      }
     } else if (userPlanes.length == 1) {
       const requestOptions2 = {
         method: "POST",
@@ -66,15 +69,18 @@ const Planes = ({ button, filter, showUserPlans }) => {
       await fetch(
         `https://intap-suscripciones.herokuapp.com/public/api/suscribirse/${userPlanes[0]}`,
         requestOptions2
-      ).then((response) => {
-        setUserPlanes([]);
-        console.log(response.json());
-        if (showUserPlans) {
-          handleGetPlans();
-        } else {
-          window.location.href = "/moviePage";
-        }
-      });
+      )
+        .then((response) => response.text())
+        .then((result) => console.log(result))
+        .catch((error) => console.log("error", error));
+
+      setUserPlanes([]);
+      handleGetPlans();
+      if(move){
+        window.location.href = "/moviePage";
+      }
+    }else{
+      alert('Elige un plan para continuar')
     }
   };
 
@@ -109,8 +115,8 @@ const Planes = ({ button, filter, showUserPlans }) => {
 
   const handleDeletePlan = async () => {
     let token = localStorage.getItem("token");
-    if (Delete.length > 1) {
-      console.log(Delete)
+    if (Delete.length > 1 && planes.length !== Delete.length ) {
+      console.log(Delete);
       var myHeaders = new Headers();
       myHeaders.append("token", token);
       myHeaders.append("Content-Type", "application/json");
@@ -135,7 +141,7 @@ const Planes = ({ button, filter, showUserPlans }) => {
         .catch((error) => console.log("error", error));
       setDelete([]);
       handleGetPlans();
-    } else if (Delete.length == 1) {
+    } else if (Delete.length == 1 && planes.length !== 1) {
       const requestOptions = {
         method: "POST",
         headers: { token: token },
@@ -148,6 +154,8 @@ const Planes = ({ button, filter, showUserPlans }) => {
         setDelete([]);
         handleGetPlans();
       });
+    }else if (planes.length === Delete.length){
+      alert('Debe tener al menos un plan activo para usar la plataforma')
     }
   };
   return (

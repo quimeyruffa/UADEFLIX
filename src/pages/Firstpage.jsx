@@ -2,8 +2,10 @@ import React from "react";
 import { Img,WelcomeMsg } from "../components/components";
 import Planes from "../components/Planes/Plan";
 import ImgUrl from "../img/portada.png";
+import { useNavigate } from "react-router-dom";
 
 const Firstpage = () => {
+  const navigate = useNavigate();
   const [page, setPage] = React.useState(0);
   
 
@@ -24,7 +26,7 @@ const Firstpage = () => {
                   Smart TVs,Playstation,Xbox,Chromecast, Apple TV,Blu-ray
                   players and more.
                 </p>
-                <button onClick={()=>window.location.href = '/planes'}>Ver Planes</button>
+                <button onClick={()=>navigate('/planes')}>Ver Planes</button>
               </WelcomeMsg>
             </div>
           </>

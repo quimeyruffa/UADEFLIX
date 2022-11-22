@@ -8,7 +8,6 @@ const override = {
   display: "block",
   margin: "0 auto",
   borderColor: "white",
-  
 };
 
 const responsive = {
@@ -28,31 +27,17 @@ const responsive = {
     slidesToSlide: 7, // optional, default to 1.
   },
 };
-const Carrousels = () => {
-  const [content, setCarrousel] = React.useState([]);
+const colors = ["#F95959", "#F49D1A", "#455D7A"];
+const Carrousels = ({ getDataCarrusel, content, loading, filter }) => {
   const [open, setOpen] = React.useState(false);
   const [item, setItem] = React.useState();
-  let [loading, setLoading] = React.useState(true);
   let [color, setColor] = React.useState("#ffffff");
 
   React.useEffect(() => {
-    getData();
-    getDataCarrusel();
-  }, []);
-  const getData = async () => {
-    await fetch("https://uadeflix-cms.up.railway.app/api/contenidos").then(
-      (res) => res.json()
-    );
-  };
-
-  const getDataCarrusel = async () => {
-    await fetch("https://uadeflix-cms.up.railway.app/api/carruseles")
-      .then((res) => res.json())
-      .then((res) => {
-        setCarrousel(res.results);
-        setLoading(false);
-      });
-  };
+    if (!filter) {
+      getDataCarrusel();
+    }
+  }, [filter]);
 
   const handleItem = (item) => {
     setItem(item);
@@ -62,55 +47,86 @@ const Carrousels = () => {
   return (
     <>
       {loading ? (
-        <div style={{paddingTop:250}}>
-
-            <ClipLoader
-              color={color}
-              loading={loading}
-              cssOverride={override}
-              size={150}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
+        <div style={{ paddingTop: 250 }}>
+          <ClipLoader
+            color={color}
+            loading={loading}
+            cssOverride={override}
+            size={150}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
         </div>
       ) : (
         <div style={{ marginTop: 40 }}>
           {item ? <BasicModal item={item} open={open} setOpen={setOpen} /> : ""}
-          {content.map((items, index) => (
+
+          {!filter ? (
             <>
-              <h2
-                style={{
-                  color: "white",
-                  margin: 15,
-                  paddingLeft: 5,
-                  fontWeight: "lighter",
-                }}
-              >
-                {items.title}
-              </h2>
-              <Carousel responsive={responsive} key={index}>
-                {items.contents.map((item, index) => (
+              {content.map((items, index) => (
+                <>
+                  <h2
+                    style={{
+                      color: "white",
+                      margin: 15,
+                      paddingLeft: 5,
+                      fontWeight: "lighter",
+                    }}
+                  >
+                    {items.title}
+                  </h2>
+                  <Carousel responsive={responsive} key={index}>
+                    {items?.contents?.map((item, index) => (
+                      <div
+                        style={{
+                          backgroundImage: `url(${item.urlImage})`,
+                          backgroundPosition: "top center",
+                          backgroundSize: `497px 200px`,
+                          height: 200,
+                          width: 477,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: "#06283D",
+                          cursor: "pointer",
+                          fontSize:14
+                        }}
+                        key={index}
+                        onClick={() => handleItem(item)}
+                      >
+                        <h3>{item.title}</h3>
+                      </div>
+                    ))}
+                  </Carousel>
+                </>
+              ))}{" "}
+            </>
+          ) : (
+            <>
+                <Carousel responsive={responsive} key={'carousel-search'}>
+              {content.map((items, index) => (
                   <div
                     style={{
-                      backgroundImage:`url(${item.urlImage})`,
-                      backgroundPosition: 'top center',
+                      backgroundColor:colors[index > color.length ? color.length - 1 : index],
                       backgroundSize: `497px 200px`,
                       height: 200,
-                      width: 497,
+                      width: 477,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       color: "#06283D",
+                      cursor: "pointer",
+                      fontSize:14
                     }}
                     key={index}
-                    onClick={() => handleItem(item)}
+                    onClick={() => handleItem(items)}
                   >
-                    <h3>{item.title}</h3>
+                    <h3>{items.title}</h3>
                   </div>
-                ))}
+              ))}
               </Carousel>
             </>
-          ))}
+          )}
         </div>
       )}
     </>

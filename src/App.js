@@ -1,15 +1,12 @@
 import "./App.css";
-import { Firstpage, Login, MoviePage, Planes, Register, Screen } from "./pages";
+import { Firstpage, Login, MoviePage, MuestraPlanes, Register, Screen } from "./pages";
 import { Routes, Route } from "react-router-dom";
 import { Navbar } from "./components/components";
 import React from "react";
 import HandlePlans from "./pages/HandlePlans";
+import Recomendations from "./pages/Recomendations";
 function App() {
-  // React.useEffect(() => {
-  //   if (localStorage.getItem("token")){
-  //     refresh();
-  //   }
-  // }, []);
+
 
   if (localStorage.getItem("token")) {
     return (
@@ -18,6 +15,7 @@ function App() {
         <Route path="/screen" element={<Screen />} />
         <Route path="/moviePage" element={<MoviePage />} />
         <Route path="/verPlanes" element={<HandlePlans />} />
+        <Route path="/recomendations" element={<Recomendations />} />
       </Routes>
     );
   }
@@ -39,7 +37,7 @@ function App() {
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="/moviePage" element={<Firstpage />} />
-        <Route path="/verPlanes" element={<HandlePlans />} />
+        <Route path="/planes" element={<MuestraPlanes />} />
       </Routes>
     </div>
   );

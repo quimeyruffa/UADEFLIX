@@ -53,7 +53,7 @@ const Register = () => {
   };
 
   //   Email & Number
-  const [number, setNumber] = React.useState(null);
+  const [number, setNumber] = React.useState();
   const [email, setEmail] = React.useState("");
   const [validNumber, setValidNumber] = React.useState(true);
   const [validEmail, setValidEmail] = React.useState(true);
@@ -178,7 +178,7 @@ const Register = () => {
         return (
           <CenterContainer>
             <p>2nd step - Plan Information</p>
-            <Planes button={'Sign Up'} filter={false} showUserPlans={false}/>
+            <Planes button={'Sign Up'} filter={false} showUserPlans={false} move={true}/>
           </CenterContainer>
         );
       default:

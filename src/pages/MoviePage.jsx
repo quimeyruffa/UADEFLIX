@@ -7,10 +7,61 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
+import BasicSelect from "../components/Select";
 const MoviePage = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [search, setSearch] = useState("Search...");
-  const [name, setName] = useState(null)
+  const [loading, setLoading] = React.useState(true);
+  const [filter, setFilter] = React.useState(false);
+  const [content, setCarrousel] = React.useState([]);
+  const [type, setType] = useState([]);
+  const [types, setTypes] = React.useState('');
+
+  const handleChange = async (event) => {
+    if(event.target.value !== ''){
+      setTypes(event.target.value);
+      setLoading(true);
+      await fetch(`https://uadeflix-cms.up.railway.app/api/carruseles/${event.target.value}`)
+        .then((res) => res.json())
+        .then((res) => {
+          setCarrousel([res]);
+          setLoading(false);
+        });
+    }else{
+      getDataCarrusel()
+    }
+  };
+  const getDataCarrusel = async () => {
+    await fetch("https://uadeflix-cms.up.railway.app/api/carruseles")
+      .then((res) => res.json())
+      .then((res) => {
+        setType(res.results)
+        setCarrousel(res.results);
+        setLoading(false);
+      });
+  };
+
+  const handleSetpelicula = async () => {
+    if (search !== "Search..." && search !== "") {
+      setFilter(true);
+      setLoading(true);
+      await fetch(
+        `https://uadeflix-cms.up.railway.app/api/contenidos?title=${search}&format=table`
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res.results);
+          setCarrousel(res.results);
+          setLoading(false);
+        });
+    } else{
+      setFilter(false);
+      setLoading(true);
+      getDataCarrusel();
+    }
+  };
+
+  const [name, setName] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -34,7 +85,16 @@ const MoviePage = () => {
           backgroundColor: "#133345",
         }}
       >
-        <h2 style={{color:'white', paddingLeft:30, fontWeight:'lighter', fontSize:25}}>UADEFLIX</h2>
+        <h2
+          style={{
+            color: "white",
+            paddingLeft: 30,
+            fontWeight: "lighter",
+            fontSize: 25,
+          }}
+        >
+          UADEFLIX
+        </h2>
         <div style={{ display: "flex", alignItems: "center" }}>
           <Input
             type="text"
@@ -49,6 +109,7 @@ const MoviePage = () => {
               margin: 0,
               paddingLeft: 10,
             }}
+            onFocus={() => setSearch("")}
             onChange={(e) => setSearch(e.target.value)}
             value={search}
           />
@@ -62,6 +123,7 @@ const MoviePage = () => {
               padding: 5,
               borderRadius: "0px 30px 30px 0px",
             }}
+            onClick={handleSetpelicula}
           />
         </div>
 
@@ -77,7 +139,9 @@ const MoviePage = () => {
               style={{ height: 40, width: 40, color: "white" }}
             />
           </Button>
-            <span style={{color: "white", margin:10}}>{name?.nombre} {name?.apellido}</span>
+          <span style={{ color: "white", margin: 10 }}>
+            {name?.nombre} {name?.apellido}
+          </span>
           <Menu
             id="basic-menu"
             anchorEl={anchorEl}
@@ -87,7 +151,9 @@ const MoviePage = () => {
               "aria-labelledby": "basic-button",
             }}
           >
-            <MenuItem onClick={handleClose}>Ver Planes</MenuItem>
+            <MenuItem onClick={() => (window.location.href = "/verPlanes")}>
+              Ver Planes
+            </MenuItem>
             <MenuItem
               onClick={() => {
                 localStorage.removeItem("token");
@@ -99,10 +165,14 @@ const MoviePage = () => {
           </Menu>
         </div>
       </div>
-
-
-
-      <Carrousels />
+      <BasicSelect types={type} type={types}  handleChange={handleChange} />
+      <Carrousels
+        getDataCarrusel={getDataCarrusel}
+        content={content}
+        loading={loading}
+        setLoading={setLoading}
+        filter={filter}
+      />
     </div>
   );
 };
