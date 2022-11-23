@@ -40,7 +40,7 @@ const MuestraPlanes = () => {
                   cursor: "pointer",
                 }}
               ></div>
-              <h2 style={{ margin: 0 }}>{item.nombre}</h2>
+             <h2 style={{ margin: 0, display:"flex", alignItems:'center'}}> <img alt="." src={item?.full_image_path} style={{width:30, height:30}}/> {item.nombre}</h2>
               <span>${item?.precio}</span>
               <span style={{ fontSize: 12 }}>{item?.descripcion}</span>
             </CardPlanes>

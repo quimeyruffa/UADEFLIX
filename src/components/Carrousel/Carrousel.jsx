@@ -107,7 +107,8 @@ const Carrousels = ({ getDataCarrusel, content, loading, filter }) => {
               {content.map((items, index) => (
                   <div
                     style={{
-                      backgroundColor:colors[index > color.length ? color.length - 1 : index],
+                      backgroundImage: `url(${items.urlImage})`,
+                      backgroundPosition: "top center",
                       backgroundSize: `497px 200px`,
                       height: 200,
                       width: 477,

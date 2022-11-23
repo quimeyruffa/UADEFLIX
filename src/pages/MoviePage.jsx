@@ -46,11 +46,10 @@ const MoviePage = () => {
       setFilter(true);
       setLoading(true);
       await fetch(
-        `https://uadeflix-cms.up.railway.app/api/contenidos?title=${search}&format=table`
+        `https://uadeflix-cms.up.railway.app/api/contenidos?title=${search}&format=card`
       )
         .then((res) => res.json())
         .then((res) => {
-          console.log(res.results);
           setCarrousel(res.results);
           setLoading(false);
         });

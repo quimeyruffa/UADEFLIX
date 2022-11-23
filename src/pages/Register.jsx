@@ -160,6 +160,7 @@ const Register = () => {
       algorithm: ["RS256"],
     });
     if (!decoded) {
+      setLoading(false);
       setText("Error al realizar el registro, por favor intente nuevamente");
       handleShowData();
     } else {
@@ -182,6 +183,7 @@ const Register = () => {
     ) {
       handleRegister();
     } else {
+      
       setText("Por favor, complete los campos correctamente");
       handleShowData();
     }
@@ -209,8 +211,10 @@ const Register = () => {
             handleLoginUser();
             setStep(1);
           } else {
+            
+            setLoading(false);
             setText(
-              "Error al registrar el usuario, por favor intente nuevamente"
+              "El mail ya se encuentra registrado"
             );
             handleShowData();
           }
